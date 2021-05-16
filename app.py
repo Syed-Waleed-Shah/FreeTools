@@ -1,9 +1,17 @@
 from flask import Flask, render_template, request, send_from_directory, jsonify, send_file
 from flask_restful import Resource, Api, reqparse, abort 
+import _thread as thread
 import subprocess
 from pytube import YouTube
 import time
 import os
+
+
+def downloadVideo(url):
+    yt = YouTube(url)
+    yt.streams.filter(progressive=True, file_extension="mp4").order_by('resolution').desc().first().download(app.root_path + "\\Videos",max_retries=3)
+    
+
 
 
 app = Flask(__name__)
@@ -22,9 +30,9 @@ def index():
 def download():
     url = request.args.get("url")    
     video = YouTube(url)
-    subprocess.Popen("pytube {0}".format(url))
+    thread.start_new_thread(downloadVideo, (url, ))
     time.sleep(5)
-    return send_file(video.title+".mp4", as_attachment=True)
+    return send_file(app.root_path + "\\Videos\\" + video.title+".mp4", as_attachment=True)
 
 @app.route('/test')
 def test():
