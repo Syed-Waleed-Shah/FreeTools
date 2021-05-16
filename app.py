@@ -1,7 +1,9 @@
-from flask import Flask, render_template, request, send_from_directory, jsonify
+from flask import Flask, render_template, request, send_from_directory, jsonify, send_file
 from flask_restful import Resource, Api, reqparse, abort 
+import subprocess
+from pytube import YouTube
+import time
 import os
-from flask.helpers import send_file
 
 
 app = Flask(__name__)
@@ -18,10 +20,7 @@ def index():
 
 @app.route('/download')
 def download():
-    url = request.args.get("url")
-    import subprocess
-    from pytube import YouTube
-    import time
+    url = request.args.get("url")    
     video = YouTube(url)
     subprocess.Popen("pytube {0}".format(url))
     time.sleep(5)
