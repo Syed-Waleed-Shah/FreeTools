@@ -17,11 +17,21 @@
     <title>Borrow - A Loan Company Website Templates</title>
     {% block head %} {% endblock %}
     <!-- Bootstrap -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
+      crossorigin="anonymous"
+    ></script>
+    <link href="/static/css/style.css" rel="stylesheet" />
+    <!-- Bootstrap -->
     <link href="/static/css/bootstrap/bootstrap.min.css" rel="stylesheet" />
     <link href="/static/css/style.css" rel="stylesheet" />
-    <!-- Fontawesome CSS -->
-    <link rel="stylesheet" href="/static/css/font-awesome.min.css" />
-    <link rel="stylesheet" href="/static/css/flaticon.css" />
     <link rel="stylesheet" href="/static/font-awesome/5.11.2/css/all.css" />
     <link href="/static/css/fontello.css" rel="stylesheet" />
     <!-- Google Fonts -->
@@ -690,35 +700,87 @@
         </div>
       </div>
     </div>
+
+    <!-- Modals -->
+    <div
+      class="modal fade"
+      id="exampleModalCenter"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalCenterTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">...</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button type="button" class="btn btn-primary">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <!-- back to top icon -->
     <a href="#0" class="cd-top" title="Go to top">Top</a>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="/static/js/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="/static/js/bootstrap//static/js/bootstrap.bundle.min.js"></script>
+    <script src="/static/js/bootstrap/js/bootstrap.bundle.min.js"></script>
+
     <!-- slider script -->
     <script src="/static/js/owl.carousel.min.js"></script>
     <script src="/static/js/main.js"></script>
+    <!--  <script src="/static/js/main.js"></script> -->
     <!-- Back to top script -->
     <script src="/static/js/back-to-top.js"></script>
 
     <script>
-      $("#getVideo").submit(function (e) {
-        video_url = $("#url").val();
-        $.ajax({
-          method: "GET",
-          url: origin + "/api/v1/youtube/videoinfo?url=" + video_url,
-        }).done(function (response) {
-          if (response.meta.status == "200") {
-            $("#thumbnail").attr("src", response.data.thumbnailUrl);
-            $("#title").html(response.data.title);
-            downloadUrl = "/download?url=" + video_url;
-            $("#download").attr("href", downloadUrl);
-          }
+      // Ajax request to get youtube video information
+      $(document).ready(function () {
+        $("#getVideo").submit(function (e) {
+          $("#gettingVideo").removeAttr("hidden");
+          $("#videoDetails").attr("hidden", true);
         });
-
-        e.preventDefault();
       });
+
+      // Code to register events for collapes for youtube video downloader
+      $("#showVideoDownloads").click(function () {
+        $("videosCollapse").collapse.show();
+        $("#audiosCollapse").collapse.hide();
+      });
+      $("#showAudioDownloads").click(function () {
+        $("videosCollapse").collapse.hide();
+        $("#audiosCollapse").collapse.show();
+      });
+
+      // Code to show respective selectbox for video or audio qualities on change of type selectbox
+      $(".quality-select").on("change", function () {
+        var info = this.value.split(":");
+        url = $("#" + info[0]).attr("href");
+        newUrl = url.split("&itag=")[0] + "&itag=" + info[1];
+        $("#" + info[0]).attr("href", newUrl);
+      });
+
+      function showStartingDownload() {
+        $("#exampleModalCenter").modal();
+      }
     </script>
   </body>
 

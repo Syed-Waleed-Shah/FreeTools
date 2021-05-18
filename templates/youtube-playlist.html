@@ -1,0 +1,98 @@
+{% extends 'base.html' %} {% block head %} {% endblock %} {% block body %}
+<!-- Url box -->
+<div class="row pt-4">
+  <div class="col-12">
+    <div class="newsletter-form">
+      <!-- Newsletter Form -->
+      <form id="getVideo" method="post">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control border-0 shadow-none"
+            id="url"
+            name="url"
+            placeholder="Enter or Paste Youtube Playlist URL"
+            required
+          />
+          <span class="input-group-btn">
+            <button
+              class="btn btn-secondary"
+              type="submit"
+              name="YoutubeVideoDownload"
+              value="true"
+            >
+              Download
+            </button>
+          </span>
+        </div>
+        <!-- /input-group -->
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <h3 hidden id="gettingVideo" class="text-center">
+      Getting playlist please wait...
+    </h3>
+  </div>
+</div>
+
+<div class="row text-center pb-4">
+  <div class="col-12">
+    <div class="h6">
+      Want to download youtube video and audio? Try our
+      <a href="/tools/youtube/youtube-video-downloader"
+        >Youtube Video Downloader</a
+      >
+    </div>
+  </div>
+</div>
+
+{% if playlistdetails %}
+<div id="videoDetails" class="row">
+  <!-- Thmbnail and title -->
+  <div class="col-12">
+    <div class="row">
+      <table class="table table-responsive table-bordered">
+        <thead>
+          <tr>
+            <th style="width: 15%" scope="col">Thumbnail</th>
+            <th style="width: 45%" scope="col">Title</th>
+            <th style="width: 10%" scope="col">Quality</th>
+            <th style="width: 20%" scope="col">Download</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for video in playlistdetails %}
+          <tr>
+            <th style="width: 15%" scope="col">
+              <img class="img-fluid" src="{{video.thumbnail}}" alt="" />
+            </th>
+            <th style="width: 45%" scope="col">{{video.title}}</th>
+            <th style="width: 10%" scope="col">
+              <select class="form-select quality-select" name="">
+                {% for video_stream in video.videos %}
+                <option value="{{video.id}}:{{video_stream.itag}}">
+                  {{video_stream.resolution}}
+                </option>
+                {% endfor %}
+              </select>
+            </th>
+            <th style="width: 20%" scope="col" class="text-center">
+              <a
+                id="{{video.id}}"
+                class="btn btn-sm btn-success"
+                href="/download?url={{video.url}}&itag={{video.videos[0].itag}}"
+                >Download</a
+              >
+            </th>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endif %} {%endblock %}

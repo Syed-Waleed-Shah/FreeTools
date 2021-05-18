@@ -1,0 +1,110 @@
+{% extends 'base.html' %} {% block head %} {% endblock %} {% block body %}
+<!-- Url box -->
+<div class="row pt-4">
+  <div class="col-12">
+    <div class="newsletter-form">
+      <!-- Newsletter Form -->
+      <form id="getVideo" method="post">
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control border-0 shadow-none"
+            id="url"
+            name="url"
+            placeholder="Enter or Paste Video URL"
+            required
+          />
+          <span class="input-group-btn">
+            <button
+              class="btn btn-secondary"
+              type="submit"
+              name="YoutubeVideoDownload"
+              value="true"
+            >
+              Download
+            </button>
+          </span>
+        </div>
+        <!-- /input-group -->
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-12">
+    <h3 hidden id="gettingVideo" class="text-center">
+      Getting video please wait...
+    </h3>
+  </div>
+</div>
+
+<div class="row text-center pb-4">
+  <div class="col-12">
+    <div class="h6">
+      Want to download full youtube playlist? Try our
+      <a href="/tools/youtube/youtube-playlist-downloader"
+        >Youtube Playlist Downloader</a
+      >
+    </div>
+  </div>
+</div>
+
+{% if videodetails %}
+<div id="videoDetails" class="row">
+  <!-- Thmbnail and title -->
+  <div class="col-lg-6">
+    <div class="row">
+      <div class="col-12 form-group">
+        <img
+          id="thumbnail"
+          src="{{videodetails.thumbnail}}"
+          class="img-fluid"
+          alt=""
+        />
+      </div>
+      <div class="col-12 form-group">
+        <div id="title" class="h4">{{videodetails.title}}</div>
+      </div>
+      <div class="col-12 form-group">
+        <div id="title" class="h6">{{videodetails.views}} Views</div>
+      </div>
+    </div>
+  </div>
+  <!-- Download options -->
+  <div class="col-lg-6">
+    <div class="row">
+      <!-- Videos -->
+      <div class="col-12">
+        <div class="collapse multi-collapse show" id="videosCollapse">
+          <table class="table table-bordered table-responsive">
+            <thead>
+              <tr>
+                <th style="width: 40%" scope="col">Type</th>
+                <th style="width: 30%" scope="col">Quality</th>
+                <th style="width: 30%" scope="col">Download</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for video in videodetails.videos %}
+              <tr>
+                <td style="width: 40%">{{video.mime_type}}</td>
+                <td style="width: 30%">{{video.resolution}}</td>
+                <td style="width: 30%" class="text-center">
+                  <a
+                    class="btn btn-sm btn-success download-btn"
+                    onclick="showStartingDownload()"
+                    href="/download?itag={{video.itag}}&url={{videodetails.url}}"
+                    >Download</a
+                  >
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %} {%endblock %}

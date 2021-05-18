@@ -4921,8 +4921,3 @@ Landing Page Template
     display: none;
   }
 }
-
-/* My own custom css */
-.main-content {
-  min-height: 100vh;
-}
