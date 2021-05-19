@@ -91,12 +91,14 @@
                 <td style="width: 40%">{{video.mime_type}}</td>
                 <td style="width: 30%">{{video.resolution}}</td>
                 <td style="width: 30%" class="text-center">
-                  <a
+                  <button
                     class="btn btn-sm btn-success download-btn"
-                    onclick="showStartingDownload()"
-                    href="/download?itag={{video.itag}}&url={{videodetails.url}}"
-                    >Download</a
+                    onclick="triggerDownload('{{video.download_url}}', '{{videodetails.title}}', '{{video.mime_type}}')"
+                    target="_blank"
+                    href="#"
                   >
+                    Download
+                  </button>
                 </td>
               </tr>
               {% endfor %}

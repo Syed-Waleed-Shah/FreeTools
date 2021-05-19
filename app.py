@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, send_from_directory, jsonify, send_file
 from flask_restful import Resource, Api, reqparse, abort 
+from flask_cors import CORS
 import _thread as thread
 import subprocess
 from pytube import YouTube, Playlist
@@ -14,7 +15,7 @@ def downloadVideo(url, itag, title):
     while True:
         try:
             yt = YouTube(url)
-            yt.streams.get_by_itag(itag).download(app.root_path + "\\Videos", sanitize(title),   max_retries=5)
+            yt.streams.get_by_itag(itag).download(os.path.join(app.root_path , "Videos"), sanitize(title),   max_retries=5)
         except:
             pass
         else:
@@ -39,7 +40,7 @@ def getVideDetails(url):
         for video in videos:
             videosjson.append(
                 {
-                    "itag":video.itag, "mime_type":video.mime_type, "resolution":video.resolution
+                    "itag":video.itag, "mime_type":video.mime_type, "resolution":video.resolution, "download_url":video.url
                 }
             )       
 
@@ -82,6 +83,7 @@ def getPlaylistDetails(url):
 
 
 app = Flask(__name__)
+CORS(app)
 api = Api(app)
 @app.route('/', methods=["GET", "POST"])
 def index():    
@@ -121,8 +123,9 @@ def download():
     # return send_file(app.root_path + "\\Videos\\" + sanitize(title)+".mp4", as_attachment=True)
     while True:
         try:
-            return send_file(app.root_path + "\\Videos\\" + sanitize(title)+".mp4", as_attachment=True)
+            return send_file(os.path.join(app.root_path, "Videos" , sanitize(title)+".mp4"), as_attachment=True)
         except Exception as e:
+            time.sleep(2)
             print(e)
         else:
             break
@@ -133,6 +136,10 @@ def download():
 def test():
     url = request.args.get("url")
     return send_file(url, as_attachment=True)
+
+@app.route('/path-test')
+def pathtest():
+    return str(os.path.join(app.root_path, "Videos", "Audios"))
 
 
 # ----------------------------------------------------

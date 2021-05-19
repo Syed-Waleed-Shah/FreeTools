@@ -778,8 +778,18 @@
         $("#" + info[0]).attr("href", newUrl);
       });
 
-      function showStartingDownload() {
-        $("#exampleModalCenter").modal();
+      function triggerDownload(url, filename, mime_type) {
+        var x = new XMLHttpRequest();
+        x.open("GET", url, true);
+        x.responseType = "blob";
+        x.onload = function (e) {
+          download(
+            x.response,
+            filename + "." + mime_type.split("/")[1],
+            mime_type
+          );
+        };
+        x.send();
       }
     </script>
   </body>
